@@ -9,7 +9,7 @@ var {
 } = require("graphql");
 
 const moment = require("moment");
-const User = require('../model/user')
+const User = require("../model/user");
 
 const UserType = new GraphQLObjectType({
   name: "User",
@@ -23,6 +23,17 @@ const UserType = new GraphQLObjectType({
     //   type: GraphQLString,
     //   default: Date.now(),
     // },
+  }),
+});
+
+const EntryType = new GraphQLObjectType({
+  name: "Entry",
+  description: "Entry - diary entry",
+  fields: () => ({
+    title: { type: GraphQLString },
+    description: { type: GraphQLString },
+    date: { type: GraphQLString, default: Date.now() },
+    profession: { type: GraphQLString },
   }),
 });
 
@@ -46,6 +57,28 @@ const RootQuery = new GraphQLObjectType({
           name: "Paulo",
           age: 34,
           profession: "programmer",
+          //date: moment(Date.now()).format("DD/MM/YYYY"),
+        });
+      },
+    },
+
+    //entry
+    entry: {
+      type: EntryType,
+      args: {
+        id: {
+          type: GraphQLInt,
+        },
+      },
+      resolve(parent, args) {
+        //get and return data from the data source
+
+        return (entry = {
+          // id: args.id,
+          title: "first",
+          description: "lalal",
+          date: Date.now(),
+
           //date: moment(Date.now()).format("DD/MM/YYYY"),
         });
       },
