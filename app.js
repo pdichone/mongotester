@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 
 const cors = require("cors");
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 8000;
 var { graphqlHTTP } = require("express-graphql");
 const schema = require("./server/schema/schema");
 
@@ -25,6 +25,6 @@ mongoose
   )
   .then(() => {
     app.listen({ port: port }, () => {
-      console.log("Your Apollo Server is running on port" + port);
+      console.log("Your Apollo Server is running on port " + port);
     });
   });
