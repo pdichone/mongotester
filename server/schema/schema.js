@@ -4,12 +4,14 @@ var {
   GraphQLID,
   GraphQLString,
   GraphQLInt,
+  GraphQLList,
   GraphQLNonNull,
   GraphQLSchema,
 } = require("graphql");
 
 const moment = require("moment");
 const User = require("../model/user");
+const Entry = require("../model/entry");
 
 const UserType = new GraphQLObjectType({
   name: "User",
@@ -33,7 +35,7 @@ const EntryType = new GraphQLObjectType({
     title: { type: GraphQLString },
     description: { type: GraphQLString },
     date: { type: GraphQLString, default: Date.now() },
-    profession: { type: GraphQLString },
+    userId: { type: GraphQLString },
   }),
 });
 
@@ -59,6 +61,13 @@ const RootQuery = new GraphQLObjectType({
           profession: "programmer",
           //date: moment(Date.now()).format("DD/MM/YYYY"),
         });
+      },
+    },
+
+    users: {
+      type: new GraphQLList(UserType),
+      resolve(parent, args) {
+        return User.find({});
       },
     },
 
@@ -88,7 +97,7 @@ const RootQuery = new GraphQLObjectType({
 
 //Mutations
 const Mutation = new GraphQLObjectType({
-  name: "CreateUser",
+  name: "Mutation",
   fields: {
     CreateUser: {
       type: UserType,
@@ -106,6 +115,29 @@ const Mutation = new GraphQLObjectType({
         });
         //save to our db
         return user.save();
+      },
+    },
+
+    //addEntry
+    addEntry: {
+      type: EntryType,
+      args: {
+        id: { type: GraphQLString },
+        title: { type: new GraphQLNonNull(GraphQLString) },
+        description: { type: GraphQLString },
+        date: { type: GraphQLString, defaultValue: Date.now() },
+        userId: { type: GraphQLString },
+      },
+      resolve(parent, args) {
+        let entry = new Entry({
+          id: args.id,
+          title: args.title,
+          description: args.description,
+          date: args.date,
+          userId: args.userId, //relationship
+        });
+        //save to our db
+        return entry.save();
       },
     },
 
