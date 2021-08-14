@@ -1,14 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const cors = require("cors");
 
+const cors = require("cors");
+const port = process.env.PORT || 4000;
 var { graphqlHTTP } = require("express-graphql");
 const schema = require("./server/schema/schema");
-
-const graphqlSchema = require("./server/schema/prodSchema");
-const graphqlResolver = require("./resolvers");
-
-var root = { hello: () => "Hello world!" };
 
 var app = express();
 app.use(
@@ -28,7 +24,7 @@ mongoose
     { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }
   )
   .then(() => {
-    app.listen({ port: 3000 }, () => {
-      console.log("Your Apollo Server is running on port 3000");
+    app.listen({ port: port }, () => {
+      console.log("Your Apollo Server is running on port" + port);
     });
   });
