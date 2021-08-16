@@ -10,24 +10,26 @@ class UsersPage extends StatefulWidget {
 }
 
 class _UsersPageState extends State<UsersPage> {
-//   final String _query = """
-//   query users {
-//       id
-//       name
-//       age
-//       profession
-//   }
-// """;
   final String _query = """
-  query users {
+  query {
     users {
       id
       name
-      rocket
-      twitter
-    }
+      age
+      profession
+   }
   }
 """;
+//   final String _query = """
+//   query users {
+//     users {
+//       id
+//       name
+//       rocket
+//       twitter
+//     }
+//   }
+// """;
   @override
   Widget build(BuildContext context) {
     return Query(
@@ -68,7 +70,21 @@ class _UsersPageState extends State<UsersPage> {
                     child: Row(
                       children: [
                         Container(
-                          child: Text(user['name'] ?? 'N/A'),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    user['name'] ?? 'N/A',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Text(user['profession'] ?? 'N/A')
+                              ]),
                         )
                       ],
                     ),

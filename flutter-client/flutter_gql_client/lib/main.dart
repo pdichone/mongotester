@@ -6,10 +6,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initHiveForFlutter();
 
-  final HttpLink link = HttpLink(
-    //'http://localhost:3000/graphql'
-    'https://api.spacex.land/graphql/',
-  );
+  final HttpLink link = HttpLink('https://hobbies-tesp.herokuapp.com/graphql'
+      //'https://api.spacex.land/graphql/',
+      );
 
   ValueNotifier<GraphQLClient> client = ValueNotifier(
     GraphQLClient(link: link, cache: GraphQLCache(store: HiveStore())),
@@ -60,7 +59,7 @@ class _MyHomePageState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("SpaceX Land"),
+        title: Text("Hobbies"),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
