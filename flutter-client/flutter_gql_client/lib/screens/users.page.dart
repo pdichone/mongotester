@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
+import 'details.page.dart';
+
 class UsersPage extends StatefulWidget {
   const UsersPage({Key? key}) : super(key: key);
 
@@ -56,7 +58,7 @@ class _UsersPageState extends State<UsersPage> {
               return Stack(
                 children: [
                   Container(
-                    margin: EdgeInsets.only(bottom: 23),
+                    margin: EdgeInsets.only(bottom: 23, left: 10, right: 10),
                     decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(15),
@@ -67,28 +69,70 @@ class _UsersPageState extends State<UsersPage> {
                               blurRadius: 30)
                         ]),
                     padding: const EdgeInsets.all(20),
-                    child: Row(
-                      children: [
-                        Container(
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    user['name'] ?? 'N/A',
+                    child: InkWell(
+                      child: Container(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "${user['name'].toUpperCase() ?? 'N/A'}",
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                ),
-                                Text(user['profession'] ?? 'N/A')
-                              ]),
-                        )
-                      ],
+                                  InkWell(
+                                    child: Container(
+                                      child: Icon(
+                                        Icons.edit,
+                                        color: Colors.greenAccent,
+                                      ),
+                                    ),
+                                    onTap: () async {
+                                      // final route = MaterialPageRoute(
+                                      //   builder: (context) => UpdateUser(
+                                      //       id: user["id"],
+                                      //       name: user["name"],
+                                      //       age: user["age"],
+                                      //       profession: user["profession"]),
+                                      // );
+                                      // final result =
+                                      //     await Navigator.push(context, route);
+
+                                      // if (result != null && result) {
+                                      //   /// TODO: Have a better way of notifying this dashboard screen to fetch new data
+                                      //   setState(() {});
+                                      // }
+                                    },
+                                  )
+                                ],
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 8.0, top: 8),
+                                child: Text(
+                                    "Occupation: ${user['profession'] ?? 'N/A'}"),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text("age: ${user['age'] ?? 'N/A'}"),
+                              )
+                            ]),
+                      ),
+                      onTap: () async {
+                        final route = MaterialPageRoute(
+                          builder: (context) => DetailsPage(
+                            user: user,
+                          ),
+                        );
+                        await Navigator.push(context, route);
+                      },
                     ),
-                  )
+                  ),
                 ],
               );
             },

@@ -60,7 +60,7 @@ class _MyHomePageState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Hobbies",
+          "Hobbies & Users",
           style: TextStyle(
               color: Colors.grey, fontSize: 19, fontWeight: FontWeight.bold),
         ),
