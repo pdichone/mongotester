@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gql_client/add.users.page.dart';
 import 'package:flutter_gql_client/screens/users.page.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -103,6 +104,16 @@ class _MyHomePageState extends State<HomeScreen> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final route = MaterialPageRoute(
+            builder: (context) => AddUserPage(),
+          );
+          await Navigator.push(context, route);
+        },
+        backgroundColor: Colors.lightGreen,
+        child: Icon(Icons.group_add),
       ),
     );
   }
