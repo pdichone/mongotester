@@ -7,7 +7,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initHiveForFlutter();
 
-  final HttpLink link = HttpLink('https://hobbies-tesp.herokuapp.com/graphql'
+  final HttpLink link = HttpLink('https://mytest-app-pa.herokuapp.com/graphql'
       //'https://api.spacex.land/graphql/',
       );
 

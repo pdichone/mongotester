@@ -54,7 +54,6 @@ class _UsersPageState extends State<UsersPage> {
             itemCount: users.length,
             itemBuilder: (context, index) {
               final user = users[index];
-
               return Stack(
                 children: [
                   Container(

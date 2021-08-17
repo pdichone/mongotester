@@ -77,7 +77,7 @@ class _AddUserPageState extends State<AddUserPage> {
           style: TextStyle(
               color: Colors.grey, fontSize: 19, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.lightGreen,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -192,8 +192,11 @@ class _AddUserPageState extends State<AddUserPage> {
                                       _isSaving = true;
                                     });
                                     runMutation({
-                                      'name': _nameController.text,
-                                      'profession': _professionController.text,
+                                      'name': _nameController.text
+                                          .toString()
+                                          .trim(),
+                                      'profession':
+                                          _professionController.text.trim(),
                                       'age': int.parse(_ageController.text)
                                     });
                                   }
