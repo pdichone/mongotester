@@ -22,16 +22,7 @@ class _UsersPageState extends State<UsersPage> {
    }
   }
 """;
-//   final String _query = """
-//   query users {
-//     users {
-//       id
-//       name
-//       rocket
-//       twitter
-//     }
-//   }
-// """;
+
   @override
   Widget build(BuildContext context) {
     return Query(

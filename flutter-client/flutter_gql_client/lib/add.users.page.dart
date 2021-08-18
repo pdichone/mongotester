@@ -200,6 +200,9 @@ class _AddUserPageState extends State<AddUserPage> {
                                       'age': int.parse(_ageController.text)
                                     });
                                   }
+                                  _ageController.clear();
+                                  _nameController.clear();
+                                  _professionController.clear();
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -304,6 +307,8 @@ class _AddUserPageState extends State<AddUserPage> {
                                         'userId': currUserId
                                       });
                                     }
+                                    _hobbyTitleController.clear();
+                                    _hobbyDescriptionController.clear();
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -345,7 +350,7 @@ class _AddUserPageState extends State<AddUserPage> {
                           Duration(
                             milliseconds: 12,
                           ), () {
-                        Navigator.pop(context, true);
+                        // Navigator.pop(context, true);
                       });
                     },
                   ),
@@ -390,6 +395,8 @@ class _AddUserPageState extends State<AddUserPage> {
                                         'comment': _postController.text,
                                         'userId': currUserId
                                       });
+                                      //clear fields
+                                      _postController.clear();
                                     }
                                   },
                                   child: Padding(
