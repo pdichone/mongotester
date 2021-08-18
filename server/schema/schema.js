@@ -52,14 +52,14 @@ const UserType = new GraphQLObjectType({
     posts: {
       type: new GraphQLList(PostType),
       resolve(parent, args) {
-        return Post.find({ userId: parent.id });
+        return Post.find({ userId: parent.id }); //make sure to show this filtering when recording videos!!
       },
     },
 
     hobbies: {
       type: new GraphQLList(HobbyType),
       resolve(parent, args) {
-        return Hobby.find({ userId: parent.id });
+        return Hobby.find({ userId: parent.id }); //make sure to show this filtering when recording videos!!
       },
     },
   }),
