@@ -351,7 +351,24 @@ const Mutation = new GraphQLObjectType({
         ));
       },
     },
+    //remove a list of hobbies
+    RemoveHobbies: {
+      type: HobbyType,
+      args: {
+        ids: { type: new GraphQLList() },
+      },
 
+      resolve(parent, args) {
+        let removedHobby = Hobby.deleteMany(args.ids).exec();
+
+        if (!removedHobby) {
+          //las
+          throw new "Error"();
+        }
+
+        return removedHobby;
+      },
+    },
     //Remove hobby with userId
     RemoveHobbyWithUserId: {
       type: HobbyType,
