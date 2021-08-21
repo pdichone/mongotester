@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gql_client/add.users.page.dart';
+import 'package:flutter_gql_client/screens/add.users.page.dart';
 import 'package:flutter_gql_client/screens/users.page.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 void main() async {
@@ -25,14 +26,23 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return GraphQLProvider(
       client: client,
       child: CacheProvider(
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            title: 'Flutter Demo',
+            title: '',
             theme: ThemeData(
-              primarySwatch: Colors.blue,
+              primarySwatch: Colors.blueGrey,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+              textTheme: textTheme,
+              appBarTheme: AppBarTheme(
+                iconTheme: IconThemeData(
+                  color: Colors.black87,
+                ),
+                textTheme: textTheme,
+              ),
             ),
             home: HomeScreen()),
       ),
@@ -46,22 +56,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<HomeScreen> {
-  int _currentIndex = 1;
-
   @override
   Widget build(BuildContext context) {
     Widget content = UsersPage();
-
-    // if (_currentIndex == 1) {
-    //   content = LaunchUpcomingPage();
-    // } else if (_currentIndex == 2) {
-    //   content = LaunchHistoryPage();
-    // }
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Hobbies & Users",
+          "Users & Hobbies",
           style: TextStyle(
               color: Colors.grey, fontSize: 19, fontWeight: FontWeight.bold),
         ),
@@ -71,40 +72,40 @@ class _MyHomePageState extends State<HomeScreen> {
       body: Center(
         child: content,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        selectedItemColor: Colors.black87,
-        unselectedItemColor: Colors.grey.shade500,
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: [
-          BottomNavigationBarItem(
-            label: "Users",
-            icon: Icon(
-              Icons.group,
-              size: 16,
-            ),
-          ),
-          BottomNavigationBarItem(
-            label: ("Upcoming"),
-            icon: Icon(
-              Icons.track_changes,
-              size: 16,
-            ),
-          ),
-          BottomNavigationBarItem(
-            label: 'History',
-            icon: Icon(
-              Icons.history,
-              size: 16,
-            ),
-          ),
-        ],
-      ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   backgroundColor: Colors.white,
+      //   selectedItemColor: Colors.black87,
+      //   unselectedItemColor: Colors.grey.shade500,
+      //   currentIndex: _currentIndex,
+      //   onTap: (index) {
+      //     setState(() {
+      //       _currentIndex = index;
+      //     });
+      //   },
+      //   items: [
+      //     BottomNavigationBarItem(
+      //       label: "Users",
+      //       icon: Icon(
+      //         Icons.group,
+      //         size: 16,
+      //       ),
+      //     ),
+      //     BottomNavigationBarItem(
+      //       label: ("Upcoming"),
+      //       icon: Icon(
+      //         Icons.track_changes,
+      //         size: 16,
+      //       ),
+      //     ),
+      //     BottomNavigationBarItem(
+      //       label: 'History',
+      //       icon: Icon(
+      //         Icons.history,
+      //         size: 16,
+      //       ),
+      //     ),
+      //   ],
+      // ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final route = MaterialPageRoute(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gql_client/helpers/show_list.dart';
 import 'package:flutter_gql_client/screens/users.page.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -60,7 +61,8 @@ class _DetailsPageState extends State<DetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.lightGreen,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         title: Text(
           widget.user['name'],
           style: TextStyle(
@@ -69,90 +71,102 @@ class _DetailsPageState extends State<DetailsPage> {
       ),
       body: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.all(24),
-            margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  offset: Offset(0, 10),
-                  color: Colors.grey.shade300,
-                  blurRadius: 30,
-                ),
-              ],
-            ),
+          Flexible(
+            flex: 1,
+            fit: FlexFit.loose,
             child: Container(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "${widget.user['name'].toUpperCase() ?? 'N/A'}",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0, top: 8),
-                      child: Text(
-                          "Occupation: ${widget.user['profession'] ?? 'N/A'}"),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text("age: ${widget.user['age'] ?? 'N/A'}"),
-                    )
-                  ]),
+              padding: const EdgeInsets.all(24),
+              margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    offset: Offset(0, 10),
+                    color: Colors.grey.shade300,
+                    blurRadius: 30,
+                  ),
+                ],
+              ),
+              child: Container(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "${widget.user['name'].toUpperCase() ?? 'N/A'}",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0, top: 8),
+                        child: Text(
+                            "Occupation: ${widget.user['profession'] ?? 'N/A'}"),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text("age: ${widget.user['age'] ?? 'N/A'}"),
+                      )
+                    ]),
+              ),
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              TextButton(
-                onPressed: () {
-                  //_toggle();
-                  _toggleHobbyBtn();
+              Flexible(
+                flex: 1,
+                fit: FlexFit.loose,
+                child: TextButton(
+                  onPressed: () {
+                    //_toggle();
+                    _toggleHobbyBtn();
 
-                  /*
-                       Get all hobbies and show them
-                  */
-                },
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 36, vertical: 12),
-                  child: Text(
-                    "Hobbies",
-                    style: TextStyle(color: Colors.grey, fontSize: 16),
+                    /*
+                         Get all hobbies and show them
+                    */
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 36, vertical: 12),
+                    child: Text(
+                      "Hobbies",
+                      style: TextStyle(color: Colors.grey, fontSize: 16),
+                    ),
                   ),
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.greenAccent)),
                 ),
-                style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all(Colors.greenAccent)),
               ),
-              TextButton(
-                onPressed: () {
-                  //_toggle();
-                  _togglePostBtn();
-                  /*
-                       Get all posts and show them
-                  */
-                },
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 36, vertical: 12),
-                  child: Text(
-                    "Posts",
-                    style: TextStyle(color: Colors.grey, fontSize: 16),
+              Flexible(
+                flex: 1,
+                fit: FlexFit.loose,
+                child: TextButton(
+                  onPressed: () {
+                    //_toggle();
+                    _togglePostBtn();
+                    /*
+                         Get all posts and show them
+                    */
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 36, vertical: 12),
+                    child: Text(
+                      "Posts",
+                      style: TextStyle(color: Colors.grey, fontSize: 16),
+                    ),
                   ),
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.greenAccent)),
                 ),
-                style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all(Colors.greenAccent)),
               ),
             ],
           ),
@@ -162,10 +176,11 @@ class _DetailsPageState extends State<DetailsPage> {
                 variables: {'id': widget.user['id']}),
             builder: (result, {fetchMore, refetch}) {
               //setState(() {
-              _hobbies = result.data!['user']['hobbies'];
-              _posts = result.data!['user']['posts'];
+              _hobbies = result.data!['user']['hobbies'] ??
+                  []; //https://stackoverflow.com/questions/64278595/null-check-operator-used-on-a-null-value
+              _posts = result.data!['user']['posts'] ?? [];
               //});
-              //List userData = result.data!['users'];
+
               // print("user==> ${result.data!['user']['name']}");
               //print("Hobbies: ${result.data!['user']['hobbies']}");
               //print("Posts: ${result.data!['user']['posts']}");
@@ -173,70 +188,21 @@ class _DetailsPageState extends State<DetailsPage> {
                 visible: true,
                 child: Container(
                   height: MediaQuery.of(context).size.height * 0.45,
-                  child: ListView.builder(
-                    itemCount: _isHobby ? _hobbies.length : _posts.length,
-                    itemBuilder: (context, index) {
-                      final hobby = _hobbies[index];
-                      final post = _posts[index];
-                      print(hobby.toString());
-                      return Stack(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(
-                                bottom: 23, left: 10, right: 10, top: 22),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                      offset: Offset(0, 10),
-                                      color: Colors.grey.shade300,
-                                      blurRadius: 30)
-                                ]),
-                            padding: const EdgeInsets.all(20),
-                            child: Container(
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          _isHobby
-                                              ? "Hobby: ${hobby['title']}"
-                                              : "Post: ${post['comment']}",
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8.0, top: 8),
-                                      child: Text(
-                                        _isHobby
-                                            ? "Description: ${hobby['description']}"
-                                            : "",
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Author: ${widget.user['name']}",
-                                        style: TextStyle(
-                                            fontStyle: FontStyle.italic),
-                                      ),
-                                    )
-                                  ]),
+                  child: (_hobbies.length > 0 || _posts.length > 0)
+                      ? _isHobby
+                          ? ShowListView(
+                              isHobby: true, list: _hobbies, widget: widget)
+                          : ShowListView(
+                              isHobby: false, list: _posts, widget: widget)
+                      : Container(
+                          child: Center(
+                            child: Text(
+                              "No data Available",
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
                             ),
                           ),
-                        ],
-                      );
-                    },
-                  ),
+                        ),
                 ),
               );
             },

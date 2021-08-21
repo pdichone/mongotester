@@ -39,10 +39,13 @@ const {
   GraphQLNonNull,
 } = graphql;
 
+//subscription typs
+
 //Create types
 const UserType = new GraphQLObjectType({
   name: "User",
   description: "Documentation for user...",
+
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
@@ -131,11 +134,8 @@ const RootQuery = new GraphQLObjectType({
 
     hobbies: {
       type: new GraphQLList(HobbyType),
-      //args: {id: {type: GraphQLID}},
-      resolve(parent, args) {
-        //console.log(args.id)
-        console.log("Hello World Hobbies!" + parent.userId);
 
+      resolve(parent, args) {
         //  return Hobby.find({id: args.userId});
         return Hobby.find({ id: args.userId });
       },
@@ -215,6 +215,14 @@ const Mutation = new GraphQLObjectType({
         id: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve(parent, args) {
+        //User.updateMany();
+        // try {
+        //    User.deleteOne({ id: args.id });
+
+        // } catch (e) {
+        //   console.error(`[error] ${e}`);
+        //   throw Error("Error occured while deleting a User");
+        // }
         let removedUser = User.findByIdAndRemove(args.id).exec();
 
         if (!removedUser) {

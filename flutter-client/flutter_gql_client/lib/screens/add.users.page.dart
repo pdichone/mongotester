@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
+import '../main.dart';
+
 class AddUserPage extends StatefulWidget {
   const AddUserPage({Key? key}) : super(key: key);
 
@@ -111,12 +113,6 @@ class _AddUserPageState extends State<AddUserPage> {
                       content:
                           Text("added user id: ${data['CreateUser']['id']}"),
                     ));
-                    Future.delayed(
-                        Duration(
-                          milliseconds: 12,
-                        ), () {
-                      //Navigator.pop(context, true);
-                    });
                   },
                 ),
                 builder: (runMutation, result) {
@@ -224,8 +220,8 @@ class _AddUserPageState extends State<AddUserPage> {
               ),
 
               /*
-     Add Hobby 
-  */
+             Add Hobby 
+        */
               Visibility(
                 visible: _visible,
                 child: Mutation(
@@ -332,8 +328,8 @@ class _AddUserPageState extends State<AddUserPage> {
               ),
 
               /*
-            Add Post
-            */
+                    Add Post
+                    */
 
               Visibility(
                 visible: _visible,
@@ -418,6 +414,31 @@ class _AddUserPageState extends State<AddUserPage> {
                     );
                   },
                 ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(18.0),
+                child: Visibility(
+                    visible: _visible,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return HomeScreen();
+                          },
+                        ));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 26, vertical: 12),
+                        child: Text(
+                          "Done",
+                          style: TextStyle(color: Colors.grey, fontSize: 16),
+                        ),
+                      ),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.greenAccent)),
+                    )),
               )
             ],
           ),

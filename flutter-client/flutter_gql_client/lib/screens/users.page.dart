@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gql_client/screens/update.user.page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
+import '../main.dart';
 import 'details.page.dart';
 
 class UsersPage extends StatefulWidget {
@@ -12,6 +14,7 @@ class UsersPage extends StatefulWidget {
 }
 
 class _UsersPageState extends State<UsersPage> {
+  List users = [];
   final String _query = """
   query {
     users {
@@ -23,16 +26,51 @@ class _UsersPageState extends State<UsersPage> {
   }
 """;
 
+  final removeUserMutationKey = GlobalKey<MutationState>();
+  final removeHobbyMutationKey = GlobalKey<MutationState>();
+
+  bool _isDoneRemoving = false;
+
+  String removeUser() {
+    return """
+    mutation RemoveUser(\$id: String!) {
+      RemoveUser(id: \$id){
+         name
+      }   
+    }
+    """;
+  }
+
+  String removeHobby() {
+    return """
+    mutation RemoveHobby(\$id: String!) {
+      RemoveHobby(id: \$userId){
+         id
+      }   
+    }
+    """;
+  }
+
+  String removePost() {
+    return """
+    mutation RemovePost(\$userId: String!) {
+      RemovePost(userId: \$userId){
+         id
+      }   
+    }
+    """;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Query(
       options: QueryOptions(document: gql(_query)),
       builder: (result, {fetchMore, refetch}) {
-        print(result.data.toString());
+        // print(result.data.toString());
         if (result.isLoading) {
           return CircularProgressIndicator();
         }
-        final List users = result.data!["users"];
+        users = result.data!["users"];
         if (users.isEmpty) {
           return Container(
             child: Center(
@@ -75,29 +113,104 @@ class _UsersPageState extends State<UsersPage> {
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  InkWell(
-                                    child: Container(
-                                      child: Icon(
-                                        Icons.edit,
-                                        color: Colors.greenAccent,
-                                      ),
-                                    ),
-                                    onTap: () async {
-                                      // final route = MaterialPageRoute(
-                                      //   builder: (context) => UpdateUser(
-                                      //       id: user["id"],
-                                      //       name: user["name"],
-                                      //       age: user["age"],
-                                      //       profession: user["profession"]),
-                                      // );
-                                      // final result =
-                                      //     await Navigator.push(context, route);
+                                  Row(
+                                    children: [
+                                      InkWell(
+                                        child: Container(
+                                          child: Icon(
+                                            Icons.edit,
+                                            color: Colors.greenAccent,
+                                          ),
+                                        ),
+                                        onTap: () async {
+                                          final route = MaterialPageRoute(
+                                            builder: (context) => UpdateUser(
+                                                id: user["id"],
+                                                name: user["name"],
+                                                age: user["age"],
+                                                profession: user["profession"]),
+                                          );
+                                          final result = await Navigator.push(
+                                              context, route);
 
-                                      // if (result != null && result) {
-                                      //   /// TODO: Have a better way of notifying this dashboard screen to fetch new data
-                                      //   setState(() {});
-                                      // }
-                                    },
+                                          if (result != null && result) {
+                                            /// TODO: Have a better way of notifying this dashboard screen to fetch new data
+                                            setState(() {});
+                                          }
+                                        },
+                                      ),
+                                      _isDoneRemoving
+                                          ? Mutation(
+                                              key: removeHobbyMutationKey,
+                                              options: MutationOptions(
+                                                document: gql(removeHobby()),
+                                                onCompleted: (data) {
+                                                  print(
+                                                      "removeHobby data: ==>${data.toString()}");
+                                                },
+                                              ),
+                                              builder: (runMutation, result) {
+                                                print("Calling deleteHobby...");
+                                                runMutation(
+                                                    {'userId': user['id']});
+                                                return Container();
+                                              },
+                                            )
+                                          : Container(),
+                                      Mutation(
+                                        key: removeUserMutationKey,
+                                        options: MutationOptions(
+                                          document: gql(removeUser()),
+                                          onCompleted: (data) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  "Deleted user id: ${data!['RemoveUser']['name']}"),
+                                            ));
+                                          },
+                                        ),
+                                        builder: (runMutation, result) {
+                                          return InkWell(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 8.0, left: 14),
+                                              child: Container(
+                                                child: Icon(
+                                                  Icons.delete_forever,
+                                                  color: Colors.redAccent,
+                                                ),
+                                              ),
+                                            ),
+                                            onTap: () async {
+                                              //print("====>>>>${user['id']}");
+                                              runMutation({'id': user['id']});
+
+                                              setState(() {
+                                                _isDoneRemoving = true;
+                                              });
+
+                                              //deleteHobbyMutation(user['id']);
+                                              //deleteHobbies
+                                              // removeHobbyMutationKey
+                                              //     .currentState!
+                                              //     .runMutation(
+                                              //         {'userId': user['id']});
+
+                                              Future.delayed(
+                                                  Duration(milliseconds: 5),
+                                                  () {
+                                                Navigator.push(context,
+                                                    MaterialPageRoute(
+                                                  builder: (context) {
+                                                    return HomeScreen();
+                                                  },
+                                                )); //.then((value) => {setState(() {})});
+                                              });
+                                            },
+                                          );
+                                        },
+                                      )
+                                    ],
                                   )
                                 ],
                               ),
@@ -128,6 +241,22 @@ class _UsersPageState extends State<UsersPage> {
             },
           );
         }
+      },
+    );
+  }
+
+  void deleteHobbyMutation(String userId) {
+    Mutation(
+      options: MutationOptions(
+        document: gql(removeHobby()),
+        onCompleted: (data) {
+          print(data.toString());
+        },
+      ),
+      builder: (runMutation, result) {
+        print("Calling deleteHobby...");
+        runMutation({'userId': userId});
+        return Container();
       },
     );
   }
