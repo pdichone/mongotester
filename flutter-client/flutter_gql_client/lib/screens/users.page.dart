@@ -26,11 +26,11 @@ class _UsersPageState extends State<UsersPage> {
   }
 """;
 
-  final removeUserMutationKey = GlobalKey<MutationState>();
-  final removeHobbyMutationKey = GlobalKey<MutationState>();
+  //final removeUserMutationKey = GlobalKey<MutationState>();
+  //final removeHobbyMutationKey = GlobalKey<MutationState>();
 
-  bool _isDoneRemoving = false;
-
+  bool _isDoneRemovingHobby = false;
+  bool _isDoneRemovingPost = false;
   String removeUser() {
     return """
     mutation RemoveUser(\$id: String!) {
@@ -139,34 +139,16 @@ class _UsersPageState extends State<UsersPage> {
                                           }
                                         },
                                       ),
-                                      _isDoneRemoving
-                                          ? Mutation(
-                                              key: removeHobbyMutationKey,
-                                              options: MutationOptions(
-                                                document: gql(removeHobby()),
-                                                onCompleted: (data) {
-                                                  print(
-                                                      "removeHobby data: ==>${data.toString()}");
-                                                },
-                                              ),
-                                              builder: (runMutation, result) {
-                                                print("Calling deleteHobby...");
-                                                runMutation(
-                                                    {'userId': user['id']});
-                                                return Container();
-                                              },
-                                            )
-                                          : Container(),
                                       Mutation(
-                                        key: removeUserMutationKey,
+                                        // key: removeUserMutationKey,
                                         options: MutationOptions(
                                           document: gql(removeUser()),
                                           onCompleted: (data) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                              content: Text(
-                                                  "Deleted user id: ${data!['RemoveUser']['name']}"),
-                                            ));
+                                            // ScaffoldMessenger.of(context)
+                                            //     .showSnackBar(SnackBar(
+                                            //   content: Text(
+                                            //       "Deleted user id: ${data!['RemoveUser']['name']}"),
+                                            // ));
                                           },
                                         ),
                                         builder: (runMutation, result) {
@@ -184,12 +166,13 @@ class _UsersPageState extends State<UsersPage> {
                                             onTap: () async {
                                               //print("====>>>>${user['id']}");
                                               setState(() {
-                                                _isDoneRemoving = true;
+                                                _isDoneRemovingHobby = true;
+                                                _isDoneRemovingPost = true;
                                               });
                                               runMutation({'id': user['id']});
 
                                               Future.delayed(
-                                                  Duration(milliseconds: 5),
+                                                  Duration(milliseconds: 6),
                                                   () {
                                                 Navigator.pushAndRemoveUntil(
                                                     context, MaterialPageRoute(
@@ -203,7 +186,41 @@ class _UsersPageState extends State<UsersPage> {
                                             },
                                           );
                                         },
-                                      )
+                                      ),
+                                      _isDoneRemovingHobby
+                                          ? Mutation(
+                                              options: MutationOptions(
+                                                document: gql(removeHobby()),
+                                                onCompleted: (data) {
+                                                  print(
+                                                      "removeHobby data: ==>${data.toString()}");
+                                                },
+                                              ),
+                                              builder: (runMutation, result) {
+                                                print("Calling deleteHobby...");
+                                                runMutation(
+                                                    {'userId': user['id']});
+                                                return Container();
+                                              },
+                                            )
+                                          : Container(),
+                                      _isDoneRemovingPost
+                                          ? Mutation(
+                                              options: MutationOptions(
+                                                document: gql(removePost()),
+                                                onCompleted: (data) {
+                                                  print(
+                                                      "removePost data: ==>${data.toString()}");
+                                                },
+                                              ),
+                                              builder: (runMutation, result) {
+                                                print("Calling removePost...");
+                                                runMutation(
+                                                    {'userId': user['id']});
+                                                return Container();
+                                              },
+                                            )
+                                          : Container(),
                                     ],
                                   )
                                 ],

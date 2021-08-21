@@ -360,7 +360,7 @@ const Mutation = new GraphQLObjectType({
       },
 
       resolve(parent, args) {
-        let removedHobby = Hobby.findOneAndRemove(args.userId).exec();
+        let removedHobby = Hobby.findOneAndDelete(args.userId).exec();
 
         if (!removedHobby) {
           //las
@@ -378,7 +378,8 @@ const Mutation = new GraphQLObjectType({
       },
 
       resolve(parent, args) {
-        let removedHobby = Hobby.findByIdAndRemove(args.id).exec();
+        //findOneAndRemove
+        let removedHobby = Hobby.findOneAndDelete(args.id).exec();
 
         if (!removedHobby) {
           throw new "Error"();
