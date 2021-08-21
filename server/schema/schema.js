@@ -342,7 +342,7 @@ const Mutation = new GraphQLObjectType({
       },
 
       resolve(parent, args) {
-        let removedHobby = Hobby.findByIdAndRemove(args.userId).exec();
+        let removedHobby = Hobby.findOneAndRemove(args.userId).exec();
 
         if (!removedHobby) {
           throw new "Error"();
