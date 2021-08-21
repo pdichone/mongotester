@@ -363,7 +363,7 @@ const Mutation = new GraphQLObjectType({
 
         if (!removedHobby) {
           //las
-          throw new "Error"();
+          throw new "Error"(); //testers
         }
 
         return removedHobby;
