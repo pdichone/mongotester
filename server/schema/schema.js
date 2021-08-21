@@ -75,6 +75,7 @@ const HobbyType = new GraphQLObjectType({
     id: { type: GraphQLID },
     title: { type: GraphQLString },
     description: { type: GraphQLString },
+    userId: { type: GraphQLString },
     user: {
       type: UserType,
       resolve(parent, args) {
