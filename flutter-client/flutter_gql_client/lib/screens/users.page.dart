@@ -43,8 +43,8 @@ class _UsersPageState extends State<UsersPage> {
 
   String removeHobby() {
     return """
-    mutation RemoveHobby(\$id: String!) {
-      RemoveHobby(id: \$userId){
+    mutation RemoveHobby(\$userId: String!) {
+      RemoveHobby(userId: \$userId){
          id
       }   
     }
