@@ -355,7 +355,7 @@ const Mutation = new GraphQLObjectType({
     RemoveHobbies: {
       type: HobbyType,
       args: {
-        ids: { type: new GraphQLNonNull(GraphQLList) },
+        ids: { type: new GraphQLList() },
       },
 
       resolve(parent, args) {
