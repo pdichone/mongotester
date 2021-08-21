@@ -53,8 +53,8 @@ class _UsersPageState extends State<UsersPage> {
 
   String removePost() {
     return """
-    mutation RemovePost(\$userId: String!) {
-      RemovePost(userId: \$userId){
+    mutation RemovePostWithUserId(\$userId: String!) {
+      RemovePostWithUserId(userId: \$userId){
          id
       }   
     }
@@ -183,28 +183,22 @@ class _UsersPageState extends State<UsersPage> {
                                             ),
                                             onTap: () async {
                                               //print("====>>>>${user['id']}");
-                                              runMutation({'id': user['id']});
-
                                               setState(() {
                                                 _isDoneRemoving = true;
                                               });
-
-                                              //deleteHobbyMutation(user['id']);
-                                              //deleteHobbies
-                                              // removeHobbyMutationKey
-                                              //     .currentState!
-                                              //     .runMutation(
-                                              //         {'userId': user['id']});
+                                              runMutation({'id': user['id']});
 
                                               Future.delayed(
                                                   Duration(milliseconds: 5),
                                                   () {
-                                                Navigator.push(context,
-                                                    MaterialPageRoute(
+                                                Navigator.pushAndRemoveUntil(
+                                                    context, MaterialPageRoute(
                                                   builder: (context) {
                                                     return HomeScreen();
                                                   },
-                                                )); //.then((value) => {setState(() {})});
+                                                ),
+                                                    (route) =>
+                                                        false); //.then((value) => {setState(() {})});
                                               });
                                             },
                                           );

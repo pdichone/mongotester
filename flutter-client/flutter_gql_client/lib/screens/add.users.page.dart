@@ -421,11 +421,11 @@ class _AddUserPageState extends State<AddUserPage> {
                     visible: _visible,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(
+                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
                           builder: (context) {
                             return HomeScreen();
                           },
-                        ));
+                        ), (route) => false);
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
