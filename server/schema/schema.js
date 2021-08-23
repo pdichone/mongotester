@@ -369,14 +369,14 @@ const Mutation = new GraphQLObjectType({
       },
     },
     //Remove hobby with userId
-    RemoveHobbyWithUserId: {
+    RemoveHobbiesWithUserId: {
       type: HobbyType,
       args: {
         userId: { type: new GraphQLNonNull(GraphQLString) },
       },
 
       resolve(parent, args) {
-        let removedHobby = Hobby.findOneAndDelete(args.userId).exec();
+        let removedHobby = Hobby.deleteMany({ userId: args.userId }).exec();
 
         if (!removedHobby) {
           //las
