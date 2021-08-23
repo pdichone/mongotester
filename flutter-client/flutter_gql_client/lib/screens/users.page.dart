@@ -15,15 +15,27 @@ class UsersPage extends StatefulWidget {
 
 class _UsersPageState extends State<UsersPage> {
   List users = [];
+  List postsList = [];
+  List hobbiesList = [];
   final String _query = """
   query {
-    users {
+  users {
       id
       name
       age
       profession
-   }
+    posts{
+      id
+      comment
+      userId
+    }
+    hobbies{
+      id
+      description
+      userId
+    }
   }
+}
 """;
 
   //final removeUserMutationKey = GlobalKey<MutationState>();
@@ -53,7 +65,7 @@ class _UsersPageState extends State<UsersPage> {
 
   String removePost() {
     return """
-    mutation RemovePostsWithUserId(\$userId: String!) {
+    mutation RemovePostsWithUserId(\$userId: [String!]) {
       RemovePostsWithUserId(userId: \$userId){
          id
       }   
@@ -71,6 +83,16 @@ class _UsersPageState extends State<UsersPage> {
           return CircularProgressIndicator();
         }
         users = result.data!["users"];
+
+        for (var i = 0; i < users.length; i++) {
+          hobbiesList = users[i]["hobbies"];
+          //print("===> Hobbies: ${hobbiesList.toList().toString()}\n");
+          postsList = users[i]["posts"];
+          // print("===> Posts: ${postsList.toList().toString()}");
+        }
+
+        // hobbiesList = result.data!["users"];
+
         if (users.isEmpty) {
           return Container(
             child: Center(
@@ -79,10 +101,14 @@ class _UsersPageState extends State<UsersPage> {
           );
         } else {
           //return Text(users[2]['name'].toString());
+          //print("postList ==> ${postsList.toString()}");
+          // print("HobbiesList ==> ${hobbiesList.toString()}");
           return ListView.builder(
             itemCount: users.length,
             itemBuilder: (context, index) {
               final user = users[index];
+
+              // print("UUUUU => ${cleanList.toString()}");
               return Stack(
                 children: [
                   Container(
@@ -164,25 +190,33 @@ class _UsersPageState extends State<UsersPage> {
                                               ),
                                             ),
                                             onTap: () async {
-                                              //print("====>>>>${user['id']}");
-                                              setState(() {
-                                                _isDoneRemovingHobby = true;
-                                                _isDoneRemovingPost = true;
-                                              });
-                                              runMutation({'id': user['id']});
+                                              final List<dynamic> cleanList =
+                                                  hobbiesList.where((element) {
+                                                print(
+                                                    "Element -----> ${element.toString()} curUID: ${user['id']}");
+                                                return element['id'] ==
+                                                    user['id'];
+                                              }).toList();
+                                              print(
+                                                  "====>>>>${cleanList.toString()}");
+                                              // setState(() {
+                                              //   _isDoneRemovingHobby = true;
+                                              //   _isDoneRemovingPost = true;
+                                              // });
+                                              // runMutation({'id': user['id']});
 
-                                              Future.delayed(
-                                                  Duration(milliseconds: 6),
-                                                  () {
-                                                Navigator.pushAndRemoveUntil(
-                                                    context, MaterialPageRoute(
-                                                  builder: (context) {
-                                                    return HomeScreen();
-                                                  },
-                                                ),
-                                                    (route) =>
-                                                        false); //.then((value) => {setState(() {})});
-                                              });
+                                              // Future.delayed(
+                                              //     Duration(milliseconds: 6),
+                                              //     () {
+                                              //   Navigator.pushAndRemoveUntil(
+                                              //       context, MaterialPageRoute(
+                                              //     builder: (context) {
+                                              //       return HomeScreen();
+                                              //     },
+                                              //   ),
+                                              //       (route) =>
+                                              //           false); //.then((value) => {setState(() {})});
+                                              // });
                                             },
                                           );
                                         },

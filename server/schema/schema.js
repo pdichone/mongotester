@@ -92,6 +92,7 @@ const PostType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     comment: { type: GraphQLString },
+    userId: { type: GraphQLString },
     user: {
       type: UserType,
       resolve(parent, args) {
