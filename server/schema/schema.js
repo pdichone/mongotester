@@ -225,8 +225,8 @@ const Mutation = new GraphQLObjectType({
         //   throw Error("Error occured while deleting a User");
         // }
         let removedUser = User.findByIdAndRemove(args.id).exec();
-        Hobby.deleteMany({ userId: args.id }).exec();
-        Post.deleteMany({ userId: args.id }).exec();
+        //Hobby.deleteMany({ userId: args.id }).exec();
+        //Post.deleteMany({ userId: args.id }).exec();
 
         if (!removedUser) {
           throw new "Error"();
