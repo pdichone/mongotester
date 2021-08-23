@@ -359,7 +359,7 @@ const Mutation = new GraphQLObjectType({
       },
 
       resolve(parent, args) {
-        let removedHobby = Hobby.deleteMany(args.ids).exec();
+        let removedHobby = Hobby.deleteMany({ _id: args.ids }).exec();
 
         if (!removedHobby) {
           //las
