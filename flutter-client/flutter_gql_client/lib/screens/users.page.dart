@@ -43,8 +43,8 @@ class _UsersPageState extends State<UsersPage> {
 
   String removeHobby() {
     return """
-    mutation RemoveHobbyWithUserId(\$userId: String!) {
-      RemoveHobbyWithUserId(userId: \$userId){
+    mutation RemoveHobbiesWithUserId(\$userId: String!) {
+      RemoveHobbiesWithUserId(userId: \$userId){
          id
       }   
     }
@@ -53,8 +53,8 @@ class _UsersPageState extends State<UsersPage> {
 
   String removePost() {
     return """
-    mutation RemovePostWithUserId(\$userId: String!) {
-      RemovePostWithUserId(userId: \$userId){
+    mutation RemovePostsWithUserId(\$userId: String!) {
+      RemovePostsWithUserId(userId: \$userId){
          id
       }   
     }

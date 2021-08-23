@@ -274,14 +274,14 @@ const Mutation = new GraphQLObjectType({
     },
 
     //removePostWithUserId
-    RemovePostWithUserId: {
+    RemovePostsWithUserId: {
       type: PostType,
       args: {
         userId: { type: new GraphQLNonNull(GraphQLString) },
       },
 
       resolve(parent, args) {
-        let removedPost = Post.findOneAndRemove(args.userId).exec();
+        let removedPost = Post.deleteMany({ userId: args.userId }).exec();
 
         if (!removedPost) {
           throw new "Error"();
@@ -355,7 +355,7 @@ const Mutation = new GraphQLObjectType({
     RemoveHobbies: {
       type: HobbyType,
       args: {
-        ids: { type: new GraphQLList(GraphQLString) },
+        ids: { type: new GraphQLNonNull(GraphQLString) },
       },
 
       resolve(parent, args) {
