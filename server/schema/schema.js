@@ -277,14 +277,14 @@ const Mutation = new GraphQLObjectType({
     },
 
     //removePostWithUserId
-    RemovePostsWithUserId: {
+    RemovePosts: {
       type: PostType,
       args: {
-        userId: { type: new GraphQLList(GraphQLString) },
+        ids: { type: new GraphQLList(GraphQLString) },
       },
 
       resolve(parent, args) {
-        let removedPost = Post.deleteMany({ _id: args.userId }).exec();
+        let removedPost = Post.deleteMany({ _id: args.ids }).exec();
 
         if (!removedPost) {
           throw new "Error"();

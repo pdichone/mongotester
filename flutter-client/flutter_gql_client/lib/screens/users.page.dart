@@ -17,6 +17,8 @@ class _UsersPageState extends State<UsersPage> {
   List users = [];
   List postsList = [];
   List hobbiesList = [];
+  List<dynamic> hobbiesIDsToDelete = [];
+  List<dynamic> postsIDsToDelete = [];
   final String _query = """
   query {
   users {
@@ -55,8 +57,8 @@ class _UsersPageState extends State<UsersPage> {
 
   String removeHobby() {
     return """
-    mutation RemoveHobbiesWithUserId(\$userId: String!) {
-      RemoveHobbiesWithUserId(userId: \$userId){
+    mutation RemoveHobbies(\$ids: [String]) {
+      RemoveHobbies(ids: \$ids){
          id
       }   
     }
@@ -65,7 +67,7 @@ class _UsersPageState extends State<UsersPage> {
 
   String removePost() {
     return """
-    mutation RemovePostsWithUserId(\$userId: [String!]) {
+    mutation RemovePosts(\$userId: [String!]) {
       RemovePostsWithUserId(userId: \$userId){
          id
       }   
@@ -83,14 +85,10 @@ class _UsersPageState extends State<UsersPage> {
           return CircularProgressIndicator();
         }
         users = result.data!["users"];
+        //print("\nUsers:::: ${users.toList().toString()}\n\n");
 
-        for (var i = 0; i < users.length; i++) {
-          hobbiesList = users[i]["hobbies"];
-          //print("===> Hobbies: ${hobbiesList.toList().toString()}\n");
-          postsList = users[i]["posts"];
-          // print("===> Posts: ${postsList.toList().toString()}");
-        }
-
+        //print("===> Hobbies: ${hobbiesList.toList().toString()}\n");
+        //print("===> Posts: ${postsList.toList().toString()}");
         // hobbiesList = result.data!["users"];
 
         if (users.isEmpty) {
@@ -107,8 +105,31 @@ class _UsersPageState extends State<UsersPage> {
             itemCount: users.length,
             itemBuilder: (context, index) {
               final user = users[index];
+              //print(" ==> \n");
+              //  print("User ${user['name']} ==> ${user.toString()}");
+              hobbiesList = user['hobbies'];
+              postsList = user['posts'];
+              // for (var i = 0; i < users.length; i++) {
+              //   hobbiesList = users[i]["hobbies"];
 
-              // print("UUUUU => ${cleanList.toString()}");
+              //   postsList = users[i]["posts"];
+              // }
+
+              // print(
+              //     "${user['name']} Hobbie List ==> ${hobbiesList.toString()}");
+              // print("${user['name']} Posts List ==> ${postsList.toString()}");
+
+              // for (var i = 0; i < user['hobbies'].length; i++) {
+              //   hobbiesIDsToDelete.add(user['hobbies'][i]["id"]);
+              // }
+              // for (var j = 0; j < user['posts'].length; j++) {
+              //   postsIDsToDelete.add(user['posts'][j]["id"]);
+              // }
+              // print(
+              //     "${user['name']} Hobbies ToDelete ==> ${hobbiesIDsToDelete.toString()}");
+              // print(
+              //     "${user['name']}  Posts to Delete  ==> ${postsIDsToDelete.toString()}");
+
               return Stack(
                 children: [
                   Container(
@@ -190,20 +211,37 @@ class _UsersPageState extends State<UsersPage> {
                                               ),
                                             ),
                                             onTap: () async {
-                                              final List<dynamic> cleanList =
-                                                  hobbiesList.where((element) {
-                                                print(
-                                                    "Element -----> ${element.toString()} curUID: ${user['id']}");
-                                                return element['id'] ==
-                                                    user['id'];
-                                              }).toList();
+                                              hobbiesIDsToDelete.clear();
+                                              postsIDsToDelete.clear();
+                                              // print(
+                                              //     "***${user['name']} Hobbies Ids: ${user['hobbies']} ");
+                                              // print(
+                                              //     "***${user['name']} Posts Ids:${user['posts']} ");
+
+                                              for (var i = 0;
+                                                  i < user['hobbies'].length;
+                                                  i++) {
+                                                hobbiesIDsToDelete.add(
+                                                    user['hobbies'][i]['id']);
+                                              }
+
+                                              for (var i = 0;
+                                                  i < user['posts'].length;
+                                                  i++) {
+                                                postsIDsToDelete.add(
+                                                    user['posts'][i]['id']);
+                                              }
+
                                               print(
-                                                  "====>>>>${cleanList.toString()}");
-                                              // setState(() {
-                                              //   _isDoneRemovingHobby = true;
-                                              //   _isDoneRemovingPost = true;
-                                              // });
-                                              // runMutation({'id': user['id']});
+                                                  "***${user['name']} Hobbies TO Delete: ${hobbiesIDsToDelete.toString()} ");
+                                              print(
+                                                  "***${user['name']} Posts TO Delete: ${postsIDsToDelete.toString()} ");
+
+                                              setState(() {
+                                                _isDoneRemovingHobby = true;
+                                                _isDoneRemovingPost = true;
+                                              });
+                                              runMutation({'id': user['id']});
 
                                               // Future.delayed(
                                               //     Duration(milliseconds: 6),
@@ -233,7 +271,10 @@ class _UsersPageState extends State<UsersPage> {
                                               builder: (runMutation, result) {
                                                 print("Calling deleteHobby...");
                                                 runMutation(
-                                                    {'userId': user['id']});
+                                                    // {'userId': user['id']}
+                                                    {
+                                                      'ids': hobbiesIDsToDelete
+                                                    });
                                                 return Container();
                                               },
                                             )
@@ -250,7 +291,8 @@ class _UsersPageState extends State<UsersPage> {
                                               builder: (runMutation, result) {
                                                 print("Calling removePost...");
                                                 runMutation(
-                                                    {'userId': user['id']});
+                                                    // {'userId': user['id']}
+                                                    {'ids': postsIDsToDelete});
                                                 return Container();
                                               },
                                             )
