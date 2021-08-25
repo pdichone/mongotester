@@ -170,42 +170,44 @@ class _DetailsPageState extends State<DetailsPage> {
               ),
             ],
           ),
-          Query(
-            options: QueryOptions(
-                document: gql(getUserData),
-                variables: {'id': widget.user['id']}),
-            builder: (result, {fetchMore, refetch}) {
-              //setState(() {
-              _hobbies = result.data!['user']['hobbies'] ??
-                  []; //https://stackoverflow.com/questions/64278595/null-check-operator-used-on-a-null-value
-              _posts = result.data!['user']['posts'] ?? [];
-              //});
+          Expanded(
+            child: Query(
+              options: QueryOptions(
+                  document: gql(getUserData),
+                  variables: {'id': widget.user['id']}),
+              builder: (result, {fetchMore, refetch}) {
+                //setState(() {
+                _hobbies = result.data!['user']['hobbies'] ??
+                    []; //https://stackoverflow.com/questions/64278595/null-check-operator-used-on-a-null-value
+                _posts = result.data!['user']['posts'] ?? [];
+                //});
 
-              // print("user==> ${result.data!['user']['name']}");
-              //print("Hobbies: ${result.data!['user']['hobbies']}");
-              //print("Posts: ${result.data!['user']['posts']}");
-              return Visibility(
-                visible: true,
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.45,
-                  child: (_hobbies.length > 0 || _posts.length > 0)
-                      ? _isHobby
-                          ? ShowListView(
-                              isHobby: true, list: _hobbies, widget: widget)
-                          : ShowListView(
-                              isHobby: false, list: _posts, widget: widget)
-                      : Container(
-                          child: Center(
-                            child: Text(
-                              "No data Available",
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
+                // print("user==> ${result.data!['user']['name']}");
+                //print("Hobbies: ${result.data!['user']['hobbies']}");
+                //print("Posts: ${result.data!['user']['posts']}");
+                return Visibility(
+                  visible: true,
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.45,
+                    child: (_hobbies.length > 0 || _posts.length > 0)
+                        ? _isHobby
+                            ? ShowListView(
+                                isHobby: true, list: _hobbies, widget: widget)
+                            : ShowListView(
+                                isHobby: false, list: _posts, widget: widget)
+                        : Container(
+                            child: Center(
+                              child: Text(
+                                "No data Available",
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ),
-                        ),
-                ),
-              );
-            },
+                  ),
+                );
+              },
+            ),
           )
         ],
       ),

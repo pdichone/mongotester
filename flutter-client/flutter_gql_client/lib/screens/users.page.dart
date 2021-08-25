@@ -59,7 +59,7 @@ class _UsersPageState extends State<UsersPage> {
     return """
     mutation RemoveHobbies(\$ids: [String]) {
       RemoveHobbies(ids: \$ids){
-         id
+         
       }   
     }
     """;
@@ -67,9 +67,9 @@ class _UsersPageState extends State<UsersPage> {
 
   String removePost() {
     return """
-    mutation RemovePosts(\$userId: [String!]) {
-      RemovePostsWithUserId(userId: \$userId){
-         id
+    mutation RemovePosts(\$ids: [String]) {
+      RemovePosts(ids: \$ids){
+         
       }   
     }
     """;
@@ -182,7 +182,7 @@ class _UsersPageState extends State<UsersPage> {
 
                                           if (result != null && result) {
                                             /// TODO: Have a better way of notifying this dashboard screen to fetch new data
-                                            setState(() {});
+                                            // setState(() {});
                                           }
                                         },
                                       ),
@@ -191,6 +191,11 @@ class _UsersPageState extends State<UsersPage> {
                                         options: MutationOptions(
                                           document: gql(removeUser()),
                                           onCompleted: (data) {
+                                            if (mounted)
+                                              setState(() {
+                                                _isDoneRemovingHobby = true;
+                                                //_isDoneRemovingPost = true;
+                                              });
                                             // ScaffoldMessenger.of(context)
                                             //     .showSnackBar(SnackBar(
                                             //   content: Text(
@@ -237,23 +242,24 @@ class _UsersPageState extends State<UsersPage> {
                                               print(
                                                   "***${user['name']} Posts TO Delete: ${postsIDsToDelete.toString()} ");
 
-                                              setState(() {
-                                                _isDoneRemovingHobby = true;
-                                                _isDoneRemovingPost = true;
-                                              });
+                                              if (mounted)
+                                                setState(() {
+                                                  _isDoneRemovingHobby = true;
+                                                  _isDoneRemovingPost = true;
+                                                });
                                               runMutation({'id': user['id']});
 
                                               // Future.delayed(
-                                              //     Duration(milliseconds: 6),
+                                              //     Duration(milliseconds: 11),
                                               //     () {
-                                              //   Navigator.pushAndRemoveUntil(
-                                              //       context, MaterialPageRoute(
-                                              //     builder: (context) {
-                                              //       return HomeScreen();
-                                              //     },
-                                              //   ),
-                                              //       (route) =>
-                                              //           false); //.then((value) => {setState(() {})});
+                                              Navigator.pushAndRemoveUntil(
+                                                  context, MaterialPageRoute(
+                                                builder: (context) {
+                                                  return HomeScreen();
+                                                },
+                                              ),
+                                                  (route) =>
+                                                      false); //.then((value) => {setState(() {})});
                                               // });
                                             },
                                           );
@@ -264,17 +270,31 @@ class _UsersPageState extends State<UsersPage> {
                                               options: MutationOptions(
                                                 document: gql(removeHobby()),
                                                 onCompleted: (data) {
-                                                  print(
-                                                      "removeHobby data: ==>${data.toString()}");
+                                                  if (mounted)
+                                                    setState(() {
+                                                      _isDoneRemovingHobby =
+                                                          false;
+                                                      _isDoneRemovingPost =
+                                                          true;
+                                                    });
                                                 },
                                               ),
                                               builder: (runMutation, result) {
                                                 print("Calling deleteHobby...");
-                                                runMutation(
-                                                    // {'userId': user['id']}
-                                                    {
-                                                      'ids': hobbiesIDsToDelete
-                                                    });
+                                                if (hobbiesIDsToDelete
+                                                    .isNotEmpty) {
+                                                  Future.delayed(
+                                                      Duration(milliseconds: 6),
+                                                      () {
+                                                    runMutation(
+                                                        // {'userId': user['id']}
+                                                        {
+                                                          'ids':
+                                                              hobbiesIDsToDelete
+                                                        });
+                                                  });
+                                                }
+
                                                 return Container();
                                               },
                                             )
@@ -284,15 +304,30 @@ class _UsersPageState extends State<UsersPage> {
                                               options: MutationOptions(
                                                 document: gql(removePost()),
                                                 onCompleted: (data) {
-                                                  print(
-                                                      "removePost data: ==>${data.toString()}");
+                                                  // if (!mounted) return;
+                                                  // if (mounted){
+
+                                                  // }
+                                                  if (mounted)
+                                                    setState(() {
+                                                      _isDoneRemovingHobby =
+                                                          false;
+                                                      _isDoneRemovingPost =
+                                                          false;
+                                                    });
                                                 },
                                               ),
                                               builder: (runMutation, result) {
                                                 print("Calling removePost...");
-                                                runMutation(
-                                                    // {'userId': user['id']}
-                                                    {'ids': postsIDsToDelete});
+                                                if (postsIDsToDelete
+                                                    .isNotEmpty) {
+                                                  runMutation(
+                                                      // {'userId': user['id']}
+                                                      {
+                                                        'ids': postsIDsToDelete
+                                                      });
+                                                }
+
                                                 return Container();
                                               },
                                             )
