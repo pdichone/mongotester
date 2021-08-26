@@ -55,7 +55,7 @@ class _UsersPageState extends State<UsersPage> {
     """;
   }
 
-  String removeHobby() {
+  String removeHobbies() {
     return """
     mutation RemoveHobbies(\$ids: [String]) {
       RemoveHobbies(ids: \$ids){
@@ -65,9 +65,9 @@ class _UsersPageState extends State<UsersPage> {
     """;
   }
 
-  String removePost() {
+  String removePosts() {
     return """
-    mutation RemovePosts(\$ids: [String]) {
+    mutation removePosts(\$ids: [String]) {
       RemovePosts(ids: \$ids){
          
       }   
@@ -268,7 +268,7 @@ class _UsersPageState extends State<UsersPage> {
                                       _isDoneRemovingHobby
                                           ? Mutation(
                                               options: MutationOptions(
-                                                document: gql(removeHobby()),
+                                                document: gql(removeHobbies()),
                                                 onCompleted: (data) {
                                                   if (mounted)
                                                     setState(() {
@@ -302,12 +302,8 @@ class _UsersPageState extends State<UsersPage> {
                                       _isDoneRemovingPost
                                           ? Mutation(
                                               options: MutationOptions(
-                                                document: gql(removePost()),
+                                                document: gql(removePosts()),
                                                 onCompleted: (data) {
-                                                  // if (!mounted) return;
-                                                  // if (mounted){
-
-                                                  // }
                                                   if (mounted)
                                                     setState(() {
                                                       _isDoneRemovingHobby =
@@ -363,22 +359,6 @@ class _UsersPageState extends State<UsersPage> {
             },
           );
         }
-      },
-    );
-  }
-
-  void deleteHobbyMutation(String userId) {
-    Mutation(
-      options: MutationOptions(
-        document: gql(removeHobby()),
-        onCompleted: (data) {
-          print(data.toString());
-        },
-      ),
-      builder: (runMutation, result) {
-        print("Calling deleteHobby...");
-        runMutation({'userId': userId});
-        return Container();
       },
     );
   }
