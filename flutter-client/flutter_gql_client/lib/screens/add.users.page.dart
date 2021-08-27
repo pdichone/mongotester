@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gql_client/screens/home.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import '../main.dart';
