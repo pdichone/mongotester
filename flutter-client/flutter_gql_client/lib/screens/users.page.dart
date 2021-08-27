@@ -249,9 +249,6 @@ class _UsersPageState extends State<UsersPage> {
                                                 });
                                               runMutation({'id': user['id']});
 
-                                              // Future.delayed(
-                                              //     Duration(milliseconds: 11),
-                                              //     () {
                                               Navigator.pushAndRemoveUntil(
                                                   context, MaterialPageRoute(
                                                 builder: (context) {
@@ -260,7 +257,6 @@ class _UsersPageState extends State<UsersPage> {
                                               ),
                                                   (route) =>
                                                       false); //.then((value) => {setState(() {})});
-                                              // });
                                             },
                                           );
                                         },
