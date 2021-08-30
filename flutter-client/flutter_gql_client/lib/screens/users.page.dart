@@ -45,7 +45,7 @@ class _UsersPageState extends State<UsersPage> {
   //final removeHobbyMutationKey = GlobalKey<MutationState>();
 
   bool _isDoneRemovingHobby = false;
-  bool _isDoneRemovingPost = false;
+  bool _isRemovePost = false;
   String removeUser() {
     return """
     mutation RemoveUser(\$id: String!) {
@@ -90,7 +90,7 @@ class _UsersPageState extends State<UsersPage> {
 
         //print("===> Hobbies: ${hobbiesList.toList().toString()}\n");
         //print("===> Posts: ${postsList.toList().toString()}");
-        // hobbiesList = result.data!["users"];
+        //hobbiesList = result.data!["users"];
 
         if (users.isEmpty) {
           return Container(
@@ -115,21 +115,6 @@ class _UsersPageState extends State<UsersPage> {
 
               //   postsList = users[i]["posts"];
               // }
-
-              // print(
-              //     "${user['name']} Hobbie List ==> ${hobbiesList.toString()}");
-              // print("${user['name']} Posts List ==> ${postsList.toString()}");
-
-              // for (var i = 0; i < user['hobbies'].length; i++) {
-              //   hobbiesIDsToDelete.add(user['hobbies'][i]["id"]);
-              // }
-              // for (var j = 0; j < user['posts'].length; j++) {
-              //   postsIDsToDelete.add(user['posts'][j]["id"]);
-              // }
-              // print(
-              //     "${user['name']} Hobbies ToDelete ==> ${hobbiesIDsToDelete.toString()}");
-              // print(
-              //     "${user['name']}  Posts to Delete  ==> ${postsIDsToDelete.toString()}");
 
               return Stack(
                 children: [
@@ -178,30 +163,22 @@ class _UsersPageState extends State<UsersPage> {
                                                 age: user["age"],
                                                 profession: user["profession"]),
                                           );
-                                          final result = await Navigator.push(
+                                           await Navigator.push(
                                               context, route);
 
-                                          if (result != null && result) {
-                                            /// TODO: Have a better way of notifying this dashboard screen to fetch new data
-                                            // setState(() {});
-                                          }
+                                         
                                         },
                                       ),
                                       Mutation(
-                                        // key: removeUserMutationKey,
                                         options: MutationOptions(
                                           document: gql(removeUser()),
                                           onCompleted: (data) {
                                             if (mounted)
                                               setState(() {
                                                 _isDoneRemovingHobby = true;
-                                                //_isDoneRemovingPost = true;
+                                                
                                               });
-                                            // ScaffoldMessenger.of(context)
-                                            //     .showSnackBar(SnackBar(
-                                            //   content: Text(
-                                            //       "Deleted user id: ${data!['RemoveUser']['name']}"),
-                                            // ));
+                                            
                                           },
                                         ),
                                         builder: (runMutation, result) {
@@ -219,10 +196,7 @@ class _UsersPageState extends State<UsersPage> {
                                             onTap: () async {
                                               hobbiesIDsToDelete.clear();
                                               postsIDsToDelete.clear();
-                                              // print(
-                                              //     "***${user['name']} Hobbies Ids: ${user['hobbies']} ");
-                                              // print(
-                                              //     "***${user['name']} Posts Ids:${user['posts']} ");
+                                              
 
                                               for (var i = 0;
                                                   i < user['hobbies'].length;
@@ -238,15 +212,15 @@ class _UsersPageState extends State<UsersPage> {
                                                     user['posts'][i]['id']);
                                               }
 
-                                              print(
-                                                  "***${user['name']} Hobbies TO Delete: ${hobbiesIDsToDelete.toString()} ");
-                                              print(
-                                                  "***${user['name']} Posts TO Delete: ${postsIDsToDelete.toString()} ");
+                                              // print(
+                                              //     "***${user['name']} Hobbies TO Delete: ${hobbiesIDsToDelete.toString()} ");
+                                              // print(
+                                              //     "***${user['name']} Posts TO Delete: ${postsIDsToDelete.toString()} ");
 
                                               if (mounted)
                                                 setState(() {
                                                   _isDoneRemovingHobby = true;
-                                                  _isDoneRemovingPost = true;
+                                                  _isRemovePost = true;
                                                 });
                                               runMutation({'id': user['id']});
 
@@ -257,7 +231,7 @@ class _UsersPageState extends State<UsersPage> {
                                                 },
                                               ),
                                                   (route) =>
-                                                      false); //.then((value) => {setState(() {})});
+                                                      false); 
                                             },
                                           );
                                         },
@@ -271,7 +245,7 @@ class _UsersPageState extends State<UsersPage> {
                                                     setState(() {
                                                       _isDoneRemovingHobby =
                                                           false;
-                                                      _isDoneRemovingPost =
+                                                      _isRemovePost =
                                                           true;
                                                     });
                                                 },
@@ -296,7 +270,7 @@ class _UsersPageState extends State<UsersPage> {
                                               },
                                             )
                                           : Container(),
-                                      _isDoneRemovingPost
+                                      _isRemovePost
                                           ? Mutation(
                                               options: MutationOptions(
                                                 document: gql(removePosts()),
@@ -305,7 +279,7 @@ class _UsersPageState extends State<UsersPage> {
                                                     setState(() {
                                                       _isDoneRemovingHobby =
                                                           false;
-                                                      _isDoneRemovingPost =
+                                                      _isRemovePost =
                                                           false;
                                                     });
                                                 },

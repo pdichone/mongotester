@@ -86,7 +86,8 @@ class _AddUserPageState extends State<AddUserPage> {
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(24),
-          margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
+          margin: const EdgeInsets.symmetric(horizontal: 24, 
+          vertical: 6),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
@@ -422,7 +423,8 @@ class _AddUserPageState extends State<AddUserPage> {
                     visible: _visible,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                        Navigator.pushAndRemoveUntil(context, 
+                        MaterialPageRoute(
                           builder: (context) {
                             return HomeScreen();
                           },
@@ -433,7 +435,8 @@ class _AddUserPageState extends State<AddUserPage> {
                             horizontal: 26, vertical: 12),
                         child: Text(
                           "Done",
-                          style: TextStyle(color: Colors.grey, fontSize: 16),
+                          style: TextStyle(color: Colors.grey, 
+                          fontSize: 16),
                         ),
                       ),
                       style: ButtonStyle(

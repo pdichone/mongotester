@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gql_client/screens/add.users.page.dart';
 import 'package:flutter_gql_client/screens/home.dart';
-import 'package:flutter_gql_client/screens/users.page.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 void main() async {

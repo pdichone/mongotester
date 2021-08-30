@@ -13,7 +13,6 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
-  bool _visible = false;
   List _hobbies = [];
   List _posts = [];
   bool _isPost = false;
@@ -33,11 +32,7 @@ class _DetailsPageState extends State<DetailsPage> {
     });
   }
 
-  void _toggle() {
-    setState(() {
-      _visible = !_visible;
-    });
-  }
+  
 
   String getUserData = """
   query getUserData(\$id: String!) {

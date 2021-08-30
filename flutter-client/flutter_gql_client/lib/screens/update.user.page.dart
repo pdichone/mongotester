@@ -63,7 +63,8 @@ class _UpdateUserState extends State<UpdateUser> {
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(24),
-          margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
+          margin: const EdgeInsets.symmetric(horizontal: 24, 
+          vertical: 6),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),

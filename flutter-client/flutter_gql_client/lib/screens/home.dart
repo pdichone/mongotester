@@ -24,40 +24,6 @@ class _MyHomePageState extends State<HomeScreen> {
       body: Center(
         child: content,
       ),
-      // bottomNavigationBar: BottomNavigationBar(
-      //   backgroundColor: Colors.white,
-      //   selectedItemColor: Colors.black87,
-      //   unselectedItemColor: Colors.grey.shade500,
-      //   currentIndex: _currentIndex,
-      //   onTap: (index) {
-      //     setState(() {
-      //       _currentIndex = index;
-      //     });
-      //   },
-      //   items: [
-      //     BottomNavigationBarItem(
-      //       label: "Users",
-      //       icon: Icon(
-      //         Icons.group,
-      //         size: 16,
-      //       ),
-      //     ),
-      //     BottomNavigationBarItem(
-      //       label: ("Upcoming"),
-      //       icon: Icon(
-      //         Icons.track_changes,
-      //         size: 16,
-      //       ),
-      //     ),
-      //     BottomNavigationBarItem(
-      //       label: 'History',
-      //       icon: Icon(
-      //         Icons.history,
-      //         size: 16,
-      //       ),
-      //     ),
-      //   ],
-      // ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final route = MaterialPageRoute(
